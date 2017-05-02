@@ -38,9 +38,7 @@ class App extends Component {
         <Grid className='text-center'>
           <Row>
             <Col md={4}></Col>
-            {/*<Col md={4}><Gallery data={this.state.imgData} change={this.state.imgChange} /></Col>*/}
-                        <Col md={4}><Gallery /></Col>
-
+            <Col md={4}><Gallery /></Col>
             <Col md={4}></Col>
           </Row>
           <Row>

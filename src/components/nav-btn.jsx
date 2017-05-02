@@ -1,10 +1,9 @@
 import React from 'react';
+import { Button } from 'react-bootstrap';
 
-const NavButton = ({ children }) => {
+const NavButton = ({ children, style }) => {
     return (
-        <button className='btn'>
-            <span>{children}</span>
-        </button>
+        <Button bsStyle='link' style={style}> {children} </Button>
     );
 };
 
