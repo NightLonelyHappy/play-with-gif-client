@@ -7,7 +7,7 @@ class RandomButton extends Component {
     requestImageCount() {
         fetch('/gifs?count=true')
             .then((res) => {
-                if (res.headers.has('Total-Count')) setImageCount(1 * res.headers.get('Total-Count'));
+                if (res.headers.has('Total-Count')) this.props.setImageCount(1 * res.headers.get('Total-Count'));
                 else throw new Error();
             });
     }
@@ -15,7 +15,7 @@ class RandomButton extends Component {
     requestImage(nth) {
         fetch(`/gifs/${nth}`)
             .then((res) => res.json())
-            .then((obj) => newImageItem(obj));
+            .then((obj) => this.props.newImageItem(obj));
     }
 
     requestImageData(id) {
