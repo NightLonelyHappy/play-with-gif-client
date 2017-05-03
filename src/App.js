@@ -5,20 +5,21 @@ import './App.css';
 import ButtonBar from './components/btn-bar';
 import Gallery from './components/gallery';
 import UploadButton from './components/btn-upload';
-import { Grid, Row, Col, Clearfix, Jumbotron, Button } from 'react-bootstrap';
+import { Grid, Row, Col } from 'react-bootstrap';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 
-const imgData = (state = {}, action) => {
+const imgData = (state = {imageList: []}, action) => {
   switch (action.type) {
     case 'SET_MAIN_IMAGE':
       return { ...state, mainImage: action.image };
     case 'SET_PEER_IMAGE':
-      return { ...state, peerImage: action.image };
+      return { ...state, 
+        peerImage: action.image, 
+        imageList: Array.from(new Set([...state.imageList, action.image]))
+      };
     case 'SET_IMAGE_COUNT':
       return { ...state, count: action.count };
-    case 'SET_IMAGE':
-      return action.image;
     default:
       return state;
   }
@@ -40,8 +41,6 @@ class App extends Component {
   }
 
   render() {
-    let input;
-
     return (
       <Provider store={store}>
         <Grid className='text-center'>

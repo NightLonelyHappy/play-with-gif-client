@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 function encode (input) {
@@ -29,22 +30,31 @@ function encode (input) {
 }
 
 class Gallery extends Component {
+    reportMatching() {
+        fetch(`/relate?id=${this.props.mainImage.id}`, { 
+            method: 'PUT', 
+            body: { peers: [{ id: this.props.peerImage.id }] } })
+            .then((res) => res.status === 200 ? console.log('update relation success') : console.log('update relation failed'));
+    }
+
     render() {
-        if (!this.props.imageData) return (<div></div>)
+        if (!this.props.mainImage.data) return (<div></div>)
         return (
         <div>
-            <img src={"data:image/jpeg;base64," + encode(this.props.imageData)} alt='' />
+            <img src={"data:image/jpeg;base64," + encode(this.props.mainImage.data)} alt='' style={{cursor:'pointer'}} />
         </div>
         )
     }
 }
 
 Gallery.propTypes = {
-    imageData: PropTypes.object.isRequired
+    mainImage: PropTypes.object.isRequired,
+    peerImage: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => ({
-    imageData: state.peerImage.data
+    mainImage: state.mainImage,
+    peerImage: state.peerImage
 });
 
 export default connect(mapStateToProps)(Gallery);

@@ -1,42 +1,32 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
+import { getImageData } from '../api';
 
 class RandomButton extends Component {
-    requestImageCount() {
-        fetch('/gifs?count=true')
-            .then((res) => {
-                if (res.headers.has('Total-Count')) this.props.setImageCount(1 * res.headers.get('Total-Count'));
-                else throw new Error();
-            });
-    }
-
-    requestImage(nth) {
-        fetch(`/gifs/${nth}`)
-            .then((res) => res.json())
-            .then((obj) => this.props.newImageItem(obj));
-    }
-
     requestImageData(id) {
-        // fetch(`/gifs/?id=${id}`)
+        getImageData(id)
+            .then((data) => this.props.setPeerImage({ id, data }));
     }
 
     async clickHandler() {
         let nextPeerId;
         if (this.props.mainImage.peers.length > 0) {
             let peerIdx = this.props.mainImage.peers.findIndex((elem) => elem.id === this.props.peerImage.id);
-            nextPeerId = this.props.mainImage.peers[(nextPeerId + 1) % this.props.mainImage.peers.length].id;
+            nextPeerId = this.props.mainImage.peers[(peerIdx + 1) % this.props.mainImage.peers.length].id;
         }
         else {
-            while(true) {
+            let findImage = (id) => (elem) => elem.id === id;
+            while (true) {
                 nextPeerId = (await fetch(`/gifs/${Math.floor(Math.random() * this.props.count)}`)
-                .then((res) => res.json())).id;
-                if (!this.props.imageList.find((elem) => elem.id == nextPeerId)) break;
+                    .then((res) => res.json())).id;
+                if (!this.props.imageList.find(findImage(nextPeerId))) break;
             }
         }
 
-        requestImageData(nextPeerId);
+        this.requestImageData(nextPeerId);
     }
 
     render() {
