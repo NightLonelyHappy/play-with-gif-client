@@ -11,6 +11,12 @@ import { createStore } from 'redux';
 
 const imgData = (state = {}, action) => {
   switch (action.type) {
+    case 'SET_MAIN_IMAGE':
+      return { ...state, mainImage: action.image };
+    case 'SET_PEER_IMAGE':
+      return { ...state, peerImage: action.image };
+    case 'SET_IMAGE_COUNT':
+      return { ...state, count: action.count };
     case 'SET_IMAGE':
       return action.image;
     default:

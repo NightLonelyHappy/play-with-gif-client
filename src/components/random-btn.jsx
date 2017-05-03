@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
@@ -22,8 +22,21 @@ class RandomButton extends Component {
         // fetch(`/gifs/?id=${id}`)
     }
 
-    clickHandler() {
+    async clickHandler() {
+        let nextPeerId;
+        if (this.props.mainImage.peers.length > 0) {
+            let peerIdx = this.props.mainImage.peers.findIndex((elem) => elem.id === this.props.peerImage.id);
+            nextPeerId = this.props.mainImage.peers[(nextPeerId + 1) % this.props.mainImage.peers.length].id;
+        }
+        else {
+            while(true) {
+                nextPeerId = (await fetch(`/gifs/${Math.floor(Math.random() * this.props.count)}`)
+                .then((res) => res.json())).id;
+                if (!this.props.imageList.find((elem) => elem.id == nextPeerId)) break;
+            }
+        }
 
+        requestImageData(nextPeerId);
     }
 
     render() {
@@ -31,6 +44,13 @@ class RandomButton extends Component {
             <Button bsStyle='primary' onClick={this.clickHandler.bind(this)}>Random</Button>
         );
     }
+}
+
+RandomButton.propTypes = {
+    mainImage: PropTypes.object.isRequired,
+    peerImage: PropTypes.object.isRequired,
+    count: PropTypes.number.isRequired,
+    imageList: PropTypes.array.isRequired
 }
 
 const mapStateToProps = (state) => ({ ...state });

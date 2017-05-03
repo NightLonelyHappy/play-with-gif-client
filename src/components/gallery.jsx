@@ -1,15 +1,3 @@
-
-/*const Gallery = (props) => {
-    // if(props.data ) console.log(props.data.byteLength)
-    console.log('aaaaaa')
-    
-    return (
-        <div>
-            <img src={"data:image/png;base64," + props.data} alt='' />
-        </div>
-    );
-};*/
-
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
@@ -42,24 +30,21 @@ function encode (input) {
 
 class Gallery extends Component {
     render() {
-        this.props.data && console.log(this.props.data.byteLength)
-        if (!this.props.data) return (<div></div>)
-        let bytes = new Uint8Array(this.props.data);
-        console.log(encode(bytes))
+        if (!this.props.imageData) return (<div></div>)
         return (
         <div>
-            <img src={"data:image/jpeg;base64," + encode(bytes)} alt='' />
+            <img src={"data:image/jpeg;base64," + encode(this.props.imageData)} alt='' />
         </div>
         )
     }
 }
 
 Gallery.propTypes = {
-    data: PropTypes.object.isRequired
+    imageData: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => ({
-    data: state.imgData
+    imageData: state.peerImage.data
 });
 
 export default connect(mapStateToProps)(Gallery);

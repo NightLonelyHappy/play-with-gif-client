@@ -1,6 +1,11 @@
-export const inputImage = (buffer) => ({
-    type: 'INPUT_IMAGE',
-    buffer
+export const setMainImage = (image) => ({
+    type: 'SET_MAIN_IMAGE',
+    image
+});
+
+export const setPeerImage = (image) => ({
+    type: 'SET_PEER_IMAGE',
+    image
 });
 
 export const setImageCount = (count) => ({
